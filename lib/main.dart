@@ -1,15 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_app_example/screen/home.dart';
-import 'package:flutter_app_example/screen/auth.dart';
-import 'package:flutter_app_example/screen/login.dart';
+import 'package:flutter_app_example/screen/auth/login.dart';
+import 'package:flutter_app_example/global.dart';
 
 var routers = <String, WidgetBuilder>{
   "/home": (BuildContext context) => const HomeScreen(),
-  "/auth": (BuildContext context) => const AuthScreen(),
   "/login": (BuildContext context) => const LoginScreen()
 };
 
 void main() {
+  Global().connectToServer();
   runApp(const MyApp());
 }
 
@@ -23,7 +23,7 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       theme: ThemeData(
           primaryColor: Colors.indigo,
-          primarySwatch: Colors.indigo ,
+          primarySwatch: Colors.indigo,
           primaryColorDark: Colors.indigo),
       home: (isAuth) ? const HomeScreen() : const LoginScreen(),
       routes: routers,
