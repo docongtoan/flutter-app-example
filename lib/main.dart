@@ -5,6 +5,7 @@ import 'package:flutter_app_example/screen/home.dart';
 import 'package:flutter_app_example/screen/auth/login.dart';
 import 'package:flutter_app_example/global.dart';
 import 'package:flutter_app_example/library/local_store.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 var routers = <String, WidgetBuilder>{
   "/home": (BuildContext context) => const HomeScreen(),
@@ -14,6 +15,7 @@ var routers = <String, WidgetBuilder>{
 final global = Global();
 final localSore = LibLocalStorage();
 void main() async {
+  await dotenv.load(fileName: ".env");
   global.connectServer();
   runApp(const MyApp());
 }

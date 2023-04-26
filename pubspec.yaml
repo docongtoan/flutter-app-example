@@ -38,6 +38,7 @@ dependencies:
   socket_io_client: ^2.0.2
   rxdart: ^0.27.7
   localstorage: ^4.0.1+2
+  flutter_dotenv: ^5.0.2
 
 dev_dependencies:
   flutter_test:
@@ -62,6 +63,7 @@ flutter:
   # To add assets to your application, add an assets section, like this:
   assets:
     - lib/assets/images/
+    - .env
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware

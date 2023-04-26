@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:socket_io_client/socket_io_client.dart' as io;
 import 'package:rxdart/rxdart.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 late io.Socket socketIO;
 late BehaviorSubject<Map<String, dynamic>> result;
@@ -14,7 +15,7 @@ class Global {
   void connectServer() {
     try {
       result = BehaviorSubject<Map<String, dynamic>>();
-      socketIO = io.io('http://192.168.1.5:3000/', <String, dynamic>{
+      socketIO = io.io(dotenv.env['HOST_SERVER'], <String, dynamic>{
         'transports': ['websocket'],
         'rejectUnauthorized': false,
       });
