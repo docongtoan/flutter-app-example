@@ -1,7 +1,10 @@
+import 'dart:ui';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_app_example/screen/home.dart';
 import 'package:flutter_app_example/screen/auth/login.dart';
 import 'package:flutter_app_example/global.dart';
+import 'package:flutter_app_example/library/local_store.dart';
 
 var routers = <String, WidgetBuilder>{
   "/home": (BuildContext context) => const HomeScreen(),
@@ -9,13 +12,11 @@ var routers = <String, WidgetBuilder>{
 };
 
 final global = Global();
-
+final localSore = LibLocalStorage();
 void main() async {
   global.connectServer();
   runApp(const MyApp());
 }
-
-bool isAuth = false;
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
@@ -27,7 +28,9 @@ class MyApp extends StatelessWidget {
           primaryColor: Colors.indigo,
           primarySwatch: Colors.indigo,
           primaryColorDark: Colors.indigo),
-      home: (isAuth) ? const HomeScreen() : const LoginScreen(),
+      home: localSore.checkLogin('user-item')
+          ? const HomeScreen()
+          : const LoginScreen(),
       routes: routers,
     );
   }

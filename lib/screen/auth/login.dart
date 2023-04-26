@@ -9,7 +9,8 @@ import 'package:flutter_app_example/components/common/custom_button.dart';
 import 'package:email_validator/email_validator.dart';
 import 'package:flutter_app_example/screen/auth/forget_password.dart';
 import 'package:flutter_app_example/global.dart';
-// import 'package:flutter_app_example/library/local_store.dart';
+import 'package:flutter_app_example/library/local_store.dart';
+import 'package:localstorage/localstorage.dart';
 import 'package:rxdart/rxdart.dart';
 
 class LoginScreen extends StatefulWidget {
@@ -26,22 +27,38 @@ class _LoginScreenState extends State<LoginScreen> {
   final TextEditingController _password = TextEditingController();
 
   final global = Global();
+  final localStore = LibLocalStorage();
   static const token = 'browsersIndexLogin';
   late StreamSubscription subscription;
+  static bool flags = false;
 
   @override
   void initState() {
     super.initState();
+    if (localStore.checkLogin('user-item')) {
+      Navigator.pushNamed(context, '/home');
+    }
     subscription = global.getResponse().stream.listen((res) {
       switch (res['token']) {
         case token:
           ScaffoldMessenger.of(context).showSnackBar(SnackBar(
             content: Text(res['message']),
             backgroundColor: res['status'] == 1 ? Colors.green : Colors.red,
+            duration: const Duration(milliseconds: 999),
           ));
           if (res['status'] == 1) {
-            print(res['data']);
+            // set data user before check login
+            bool handleSaveStore =
+                localStore.set('user-item', json.encode(res['data']));
+            // check and router screen home
+            if (handleSaveStore) {
+              global.setTimeout(
+                  () => Navigator.pushNamedAndRemoveUntil(
+                      context, '/home', (route) => false),
+                  1000);
+            }
           }
+          flags = false;
           break;
         default:
       }
@@ -148,6 +165,7 @@ class _LoginScreenState extends State<LoginScreen> {
                           ),
                           CustomButton(
                             innerText: 'Đăng nhập',
+                            disabled: flags,
                             onPressed: _handleLoginUser,
                           ),
                           const SizedBox(
@@ -167,19 +185,13 @@ class _LoginScreenState extends State<LoginScreen> {
   }
 
   void _handleLoginUser() {
-    if (_loginFormKey.currentState!.validate()) {
+    if (_loginFormKey.currentState!.validate() && !flags) {
       // send email and password check login
+      flags = true;
       global.send({
         'token': token,
         'data': {'email': _email.text, 'password': _password.text}
       });
-      // set data user before check login
-      // bool saveUserItem = LibLocalStorage().set('user-item',
-      //     json.encode({'email': _email.text, 'password': _password.text}));
-      // // get data user in localStorage
-      // Object userItem = LibLocalStorage().get('user-item');
-
-      // print(userItem);
     }
   }
 }

@@ -1,15 +1,21 @@
+import 'dart:convert';
+
 import 'package:localstorage/localstorage.dart';
 
-final LocalStorage storage = new LocalStorage('local_data_app');
+LocalStorage? storage;
 
 class LibLocalStorage {
-  String get(String key) {
-    return (key.isNotEmpty) ? storage.getItem(key) : null;
+  get(String key) {
+    return (key.isNotEmpty) ? storage?.getItem(key) : '';
+  }
+
+  bool checkLogin(String key) {
+    return (storage?.getItem(key) == null) ? false : true;
   }
 
   bool set(String key, String value) {
     if (key.isNotEmpty && value.isNotEmpty) {
-      storage.setItem(key, value);
+      storage?.setItem(key, value);
       return true;
     }
     return false;
@@ -17,7 +23,7 @@ class LibLocalStorage {
 
   bool remove(String key) {
     if (key.isNotEmpty) {
-      storage.deleteItem(key);
+      storage?.deleteItem(key);
       return true;
     }
     return false;

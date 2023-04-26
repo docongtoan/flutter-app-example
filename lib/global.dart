@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:socket_io_client/socket_io_client.dart' as io;
 import 'package:rxdart/rxdart.dart';
 
@@ -12,7 +14,7 @@ class Global {
   void connectServer() {
     try {
       result = BehaviorSubject<Map<String, dynamic>>();
-      socketIO = io.io('http://172.16.1.2:3000/', <String, dynamic>{
+      socketIO = io.io('http://192.168.1.5:3000/', <String, dynamic>{
         'transports': ['websocket'],
         'rejectUnauthorized': false,
       });
@@ -40,5 +42,10 @@ class Global {
   void send(Map<String, dynamic> option) {
     option['authentication'] = {};
     socketIO.emit('server', option);
+  }
+
+  void setTimeout(callback, time) {
+    Duration timeDelay = Duration(milliseconds: time);
+    Timer(timeDelay, callback);
   }
 }
