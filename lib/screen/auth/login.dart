@@ -12,6 +12,7 @@ import 'package:flutter_app_example/global.dart';
 import 'package:flutter_app_example/library/local_store.dart';
 import 'package:localstorage/localstorage.dart';
 import 'package:rxdart/rxdart.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({Key? key}) : super(key: key);
@@ -120,7 +121,8 @@ class _LoginScreenState extends State<LoginScreen> {
                             height: 16,
                           ),
                           CustomInputField(
-                              labelText: 'Mật khẩu',
+                              // 'Mật khẩu'
+                              labelText: AppLocalizations.of(context)!.password,
                               hintText: 'Nhập mật khẩu',
                               valueCrt: _password,
                               obscureText: true,
@@ -180,7 +182,7 @@ class _LoginScreenState extends State<LoginScreen> {
             ),
           ),
         ),
-      )
+      ),
     ]);
   }
 

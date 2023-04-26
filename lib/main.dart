@@ -6,6 +6,8 @@ import 'package:flutter_app_example/screen/auth/login.dart';
 import 'package:flutter_app_example/global.dart';
 import 'package:flutter_app_example/library/local_store.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
 
 var routers = <String, WidgetBuilder>{
   "/home": (BuildContext context) => const HomeScreen(),
@@ -30,6 +32,9 @@ class MyApp extends StatelessWidget {
           primaryColor: Colors.indigo,
           primarySwatch: Colors.indigo,
           primaryColorDark: Colors.indigo),
+      localizationsDelegates: AppLocalizations.localizationsDelegates,
+      supportedLocales: AppLocalizations.supportedLocales,
+      locale: const Locale('vi'),
       home: localSore.checkLogin('user-item')
           ? const HomeScreen()
           : const LoginScreen(),

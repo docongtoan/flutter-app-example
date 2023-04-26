@@ -39,6 +39,9 @@ dependencies:
   rxdart: ^0.27.7
   localstorage: ^4.0.1+2
   flutter_dotenv: ^5.0.2
+  flutter_localizations:
+    sdk: flutter
+  intl: any
 
 dev_dependencies:
   flutter_test:
@@ -60,6 +63,8 @@ flutter:
   # included with your application, so that you can use the icons in
   # the material Icons class.
   uses-material-design: true
+
+  generate: true
   # To add assets to your application, add an assets section, like this:
   assets:
     - lib/assets/images/
