@@ -37,6 +37,7 @@ dependencies:
   email_validator: ^2.1.16
   socket_io_client: ^2.0.2
   rxdart: ^0.27.7
+  localstorage: ^4.0.1+2
 
 dev_dependencies:
   flutter_test:

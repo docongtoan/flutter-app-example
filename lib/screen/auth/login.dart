@@ -1,17 +1,22 @@
+import 'dart:async';
+import 'dart:convert';
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_app_example/components/common/custom_input_field.dart';
 import 'package:flutter_app_example/components/common/page_header.dart';
 import 'package:flutter_app_example/components/common/custom_button.dart';
 import 'package:email_validator/email_validator.dart';
 import 'package:flutter_app_example/screen/auth/forget_password.dart';
+import 'package:flutter_app_example/global.dart';
+// import 'package:flutter_app_example/library/local_store.dart';
+import 'package:rxdart/rxdart.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({Key? key}) : super(key: key);
 
   @override
-  State<LoginScreen> createState() {
-    return _LoginScreenState();
-  }
+  State<LoginScreen> createState() => _LoginScreenState();
 }
 
 class _LoginScreenState extends State<LoginScreen> {
@@ -20,12 +25,37 @@ class _LoginScreenState extends State<LoginScreen> {
   final TextEditingController _email = TextEditingController();
   final TextEditingController _password = TextEditingController();
 
+  final global = Global();
+  static const token = 'browsersIndexLogin';
+  late StreamSubscription subscription;
+
+  @override
+  void initState() {
+    super.initState();
+    subscription = global.getResponse().stream.listen((res) {
+      switch (res['token']) {
+        case token:
+          ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+            content: Text(res['message']),
+            backgroundColor: res['status'] == 1 ? Colors.green : Colors.red,
+          ));
+          if (res['status'] == 1) {
+            print(res['data']);
+          }
+          break;
+        default:
+      }
+    });
+  }
+
   @override
   void dispose() {
     // Clean up the controller when the widget is removed from the
     // widget tree.
     _email.dispose();
     _password.dispose();
+    subscription.cancel();
+    global.getResponse().close();
     super.dispose();
   }
 
@@ -36,7 +66,7 @@ class _LoginScreenState extends State<LoginScreen> {
       Container(
         decoration: const BoxDecoration(
             image: DecorationImage(
-          image: AssetImage("assets/images/bg-login.jpg"),
+          image: AssetImage("lib/assets/images/bg-login.jpg"),
           fit: BoxFit.cover,
         )),
       ),
@@ -138,8 +168,18 @@ class _LoginScreenState extends State<LoginScreen> {
 
   void _handleLoginUser() {
     if (_loginFormKey.currentState!.validate()) {
-      ScaffoldMessenger.of(context)
-          .showSnackBar(const SnackBar(content: Text('Submit data')));
+      // send email and password check login
+      global.send({
+        'token': token,
+        'data': {'email': _email.text, 'password': _password.text}
+      });
+      // set data user before check login
+      // bool saveUserItem = LibLocalStorage().set('user-item',
+      //     json.encode({'email': _email.text, 'password': _password.text}));
+      // // get data user in localStorage
+      // Object userItem = LibLocalStorage().get('user-item');
+
+      // print(userItem);
     }
   }
 }

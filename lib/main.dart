@@ -8,8 +8,10 @@ var routers = <String, WidgetBuilder>{
   "/login": (BuildContext context) => const LoginScreen()
 };
 
-void main() {
-  Global().connectToServer();
+final global = Global();
+
+void main() async {
+  global.connectServer();
   runApp(const MyApp());
 }
 
